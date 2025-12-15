@@ -14,13 +14,10 @@ class ForwardRybbitData implements ShouldQueue
         protected string $url,
         protected array $data,
         protected array $headers
-    )
-    {
-    }
+    ) {}
 
     public function handle(): void
     {
         Http::withHeaders($this->headers)->post($this->url, $this->data);
     }
-
 }

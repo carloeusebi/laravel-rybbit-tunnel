@@ -27,18 +27,18 @@ class RybbitProxyController extends Controller
 
     public function proxyTrack(Request $request)
     {
-        return $this->forwardRequest("api/track", 'POST', $request);
+        return $this->forwardRequest('api/track', 'POST', $request);
     }
 
     public function proxyIdentify(Request $request)
     {
-        return $this->forwardRequest("api/identify", 'POST', $request);
+        return $this->forwardRequest('api/identify', 'POST', $request);
     }
 
     public function proxySessionReplay(Request $request, string $siteId)
     {
         ForwardRybbitData::dispatch(
-           "$this->rybbitHost/api/session-replay/record/$siteId",
+            "$this->rybbitHost/api/session-replay/record/$siteId",
             $request->all(),
             [
                 'X-Real-Ip' => $request->ip(),
@@ -64,10 +64,10 @@ class RybbitProxyController extends Controller
 
         $httpRequest = Http::timeout(30)
             ->withHeaders([
-                'X-Real-IP'=> $clientIp,
+                'X-Real-IP' => $clientIp,
                 'X-Forwarded-For' => $clientIp,
                 'User-Agent' => $request->userAgent(),
-                'Referer' => $request->header('Referer',''),
+                'Referer' => $request->header('Referer', ''),
             ]);
 
         try {
@@ -83,7 +83,7 @@ class RybbitProxyController extends Controller
         } catch (\Exception $e) {
             Log::error('Rybbit proxy error', [
                 'url' => $url,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
 
             return response()->json(['error' => 'Analytics proxy error'], 500);
