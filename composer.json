@@ -19,7 +19,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "RybbitTunnel\\Provider"
+        "Carloeusebi\\RybbitTunnel\\Provider"
       ]
     }
   },
