@@ -1,0 +1,32 @@
+{
+    "name": "carloeusebi/laravel-rybbit-tunnel",
+    "description": "Provides endpoints to use as reverse-proxy for Rybbit analytics tool",
+    "require": {
+        "illuminate/http": "^12.42",
+        "illuminate/routing": "^12.42",
+        "illuminate/support": "^12.42",
+        "illuminate/bus": "^12.42"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.26"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Carloeusebi\\RybbitTunnel\\": "src/"
+        }
+    },
+    "extra": {
+      "laravel": {
+        "providers": [
+          "RybbitTunnel\\Provider"
+        ]
+      }
+    },
+    "authors": [
+        {
+            "name": "Carlo Eusebi",
+            "email": "carloeusebi@gmail.com"
+        }
+    ]
+}
