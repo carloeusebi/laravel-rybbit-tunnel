@@ -1,6 +1,7 @@
 <?php
 
 use Carloeusebi\RybbitTunnel\Http\Controllers\RybbitProxyController;
+use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix(config('rybbit-tunnel.tunnel-url'))->group(function () {
@@ -11,4 +12,4 @@ Route::prefix(config('rybbit-tunnel.tunnel-url'))->group(function () {
     Route::post('/session-replay/record/{siteId}', [RybbitProxyController::class, 'proxySessionReplay']);
 
     Route::get('/site/tracking-config/{siteId}', [RybbitProxyController::class, 'proxySiteConfig']);
-});
+})->withoutMiddleware(ConvertEmptyStringsToNull::class);
