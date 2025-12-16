@@ -53,7 +53,7 @@ class RybbitProxyController extends Controller
     {
         $cacheKey = config('rybbit-tunnel.cache-key-prefix').'config_'.$siteId;
 
-        return Cache::remember($cacheKey, 3600, fn () => $this->forwardRequest("site/tracking-config/$siteId", 'GET', $request));
+        return Cache::remember($cacheKey, 3600, fn () => $this->forwardRequest("api/site/tracking-config/$siteId", 'GET', $request));
     }
 
     private function forwardRequest(string $path, string $method, Request $request)
