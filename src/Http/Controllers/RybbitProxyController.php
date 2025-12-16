@@ -37,14 +37,14 @@ class RybbitProxyController extends Controller
 
     public function proxySessionReplay(Request $request, string $siteId)
     {
-        ForwardRybbitData::dispatch(
+        dispatch(new ForwardRybbitData(
             "$this->rybbitHost/api/session-replay/record/$siteId",
             $request->all(),
             [
                 'X-Real-Ip' => $request->ip(),
                 'User-Agent' => $request->userAgent(),
             ]
-        );
+        ));
 
         return response()->json(['status' => 'queued']);
     }
