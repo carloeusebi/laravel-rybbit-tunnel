@@ -58,7 +58,7 @@ class RybbitProxyController extends Controller
 
     private function forwardRequest(string $path, string $method, Request $request)
     {
-        $url = $this->rybbitHost.$path;
+        $url = "$this->rybbitHost/$path";
 
         $clientIp = $request->header('X-Forwarded-For', $request->ip());
 
