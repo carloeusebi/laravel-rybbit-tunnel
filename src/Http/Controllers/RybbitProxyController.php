@@ -62,13 +62,33 @@ class RybbitProxyController extends Controller
 
         $clientIp = $request->header('X-Forwarded-For', $request->ip());
 
-        $httpRequest = Http::timeout(30)
-            ->withHeaders([
-                'X-Real-IP' => $clientIp,
-                'X-Forwarded-For' => $clientIp,
-                'User-Agent' => $request->userAgent(),
-                'Referer' => $request->header('Referer', ''),
+        $headers = [
+            'X-Real-IP' => $clientIp,
+            'X-Forwarded-For' => $clientIp,
+            'User-Agent' => $request->userAgent(),
+            'Referer' => $request->header('Referer', ''),
+        ];
+
+        // Optional debug logging of incoming request headers, controlled via config/env
+        if (config('rybbit-tunnel.debug')) {
+
+            // Avoid logging sensitive headers verbatim
+            foreach (['authorization', 'cookie', 'x-csrf-token'] as $sensitive) {
+                if (isset($headers[$sensitive])) {
+                    $headers[$sensitive] = ['[REDACTED]'];
+                }
+            }
+
+            Log::debug('RybbitTunnel incoming request', [
+                'method' => $method,
+                'path' => $path,
+                'url' => $url,
+                'headers' => $headers,
+                'ip' => $clientIp,
             ]);
+        }
+
+        $httpRequest = Http::timeout(30)->withHeaders($headers);
 
         try {
             if ($method === 'POST') {
