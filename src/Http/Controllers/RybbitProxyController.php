@@ -60,7 +60,8 @@ class RybbitProxyController extends Controller
     {
         $url = "$this->rybbitHost/$path";
 
-        $clientIp = $request->header('X-Forwarded-For', $request->ip());
+        $forwardedFor = $request->header('X-Forwarded-For', $request->ip());
+        $clientIp = $this->normalizeClientIp($forwardedFor, (string) $request->ip());
 
         $headers = [
             'X-Real-IP' => $clientIp,
@@ -108,5 +109,29 @@ class RybbitProxyController extends Controller
 
             return response()->json(['error' => 'Analytics proxy error'], 500);
         }
+    }
+
+    private function normalizeClientIp(array|string|null $xForwardedFor, string $fallbackIp): string
+    {
+        $candidates = [];
+
+        if ($xForwardedFor !== '') {
+            foreach (explode(',', $xForwardedFor) as $part) {
+                $ip = trim($part);
+                if ($ip !== '') {
+                    $candidates[] = $ip;
+                }
+            }
+        }
+
+        $candidates[] = trim($fallbackIp);
+
+        foreach ($candidates as $ip) {
+            if (filter_var($ip, FILTER_VALIDATE_IP)) {
+                return $ip;
+            }
+        }
+
+        return $fallbackIp;
     }
 }
